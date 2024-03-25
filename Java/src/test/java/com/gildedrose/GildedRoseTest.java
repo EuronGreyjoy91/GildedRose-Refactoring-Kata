@@ -1,12 +1,37 @@
 package com.gildedrose;
 
+import com.gildedrose.exception.InvalidQualityException;
+import com.gildedrose.exception.InvalidSellInException;
+import com.gildedrose.model.GildedRose;
+import com.gildedrose.model.Item;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
+import static org.junit.jupiter.api.Assertions.*;
 
 class GildedRoseTest {
+
+    @Test
+    @DisplayName("No se pueden crear objetos con fecha de caducidad menor a 0")
+    void cannotCreateObjectsWithSellInLowerThanZero() {
+        Exception exception = assertThrows(InvalidSellInException.class, () -> new Item("Test", -1, 2));
+
+        String expectedMessage = "SellIn value cannot be lower than 0";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
+
+    @Test
+    @DisplayName("No se pueden crear objetos con calidad menor a 0")
+    void cannotCreateObjectsWithQualityLowerThanZero() {
+        Exception exception = assertThrows(InvalidQualityException.class, () -> new Item("Test", 2, -1));
+
+        String expectedMessage = "Quality value cannot be lower than 0";
+        String actualMessage = exception.getMessage();
+
+        assertTrue(actualMessage.contains(expectedMessage));
+    }
 
     @Test
     @DisplayName("Una vez pasada la fecha de caducidad, la calidad se degrada el doble rapido")
@@ -16,7 +41,7 @@ class GildedRoseTest {
         GildedRose app = new GildedRose(items);
         app.updateQuality();
 
-        assertEquals(0, app.items[0].quality);
+        assertEquals(0, app.getItems()[0].quality);
     }
 
     @Test
@@ -27,7 +52,7 @@ class GildedRoseTest {
         GildedRose app = new GildedRose(items);
         app.updateQuality();
 
-        assertTrue(app.items[0].sellIn > -1);
+        assertTrue(app.getItems()[0].sellIn > -1);
     }
 
     @Test
@@ -38,7 +63,7 @@ class GildedRoseTest {
         GildedRose app = new GildedRose(items);
         app.updateQuality();
 
-        assertTrue(app.items[0].quality > -1);
+        assertTrue(app.getItems()[0].quality > -1);
     }
 
     @Test
@@ -49,7 +74,7 @@ class GildedRoseTest {
         GildedRose app = new GildedRose(items);
         app.updateQuality();
 
-        assertEquals(7, app.items[0].quality);
+        assertEquals(7, app.getItems()[0].quality);
     }
 
     @Test
@@ -60,7 +85,7 @@ class GildedRoseTest {
         GildedRose app = new GildedRose(items);
         app.updateQuality();
 
-        assertEquals(50, app.items[0].quality);
+        assertEquals(50, app.getItems()[0].quality);
     }
 
     @Test
@@ -71,7 +96,7 @@ class GildedRoseTest {
         GildedRose app = new GildedRose(items);
         app.updateQuality();
 
-        assertEquals(80, app.items[0].quality);
+        assertEquals(80, app.getItems()[0].quality);
     }
 
     @Test
@@ -86,9 +111,9 @@ class GildedRoseTest {
         GildedRose app = new GildedRose(items);
         app.updateQuality();
 
-        assertEquals(11, app.items[0].quality);
-        assertEquals(12, app.items[1].quality);
-        assertEquals(13, app.items[2].quality);
+        assertEquals(11, app.getItems()[0].quality);
+        assertEquals(12, app.getItems()[1].quality);
+        assertEquals(13, app.getItems()[2].quality);
     }
 
     @Test
@@ -99,7 +124,7 @@ class GildedRoseTest {
         GildedRose app = new GildedRose(items);
         app.updateQuality();
 
-        assertEquals(0, app.items[0].quality);
+        assertEquals(0, app.getItems()[0].quality);
     }
 
     @Test
@@ -110,6 +135,6 @@ class GildedRoseTest {
         GildedRose app = new GildedRose(items);
         app.updateQuality();
 
-        assertEquals(18, app.items[0].quality);
+        assertEquals(18, app.getItems()[0].quality);
     }
 }
