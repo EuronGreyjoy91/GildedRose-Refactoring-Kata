@@ -3,7 +3,7 @@ package com.gildedrose.model;
 import com.gildedrose.exception.InvalidQualityException;
 import com.gildedrose.exception.InvalidSellInException;
 
-public class Item {
+public abstract class Item {
     public String name;
     public int sellIn;
     public int quality;
@@ -21,6 +21,9 @@ public class Item {
 
         this.quality = quality;
     }
+
+    abstract void updateQuality();
+    abstract void updateSellIn();
 
     @Override
     public String toString() {
